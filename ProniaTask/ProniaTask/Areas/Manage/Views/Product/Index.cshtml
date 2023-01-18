@@ -1,0 +1,85 @@
+﻿@model PaginateVM<Product>
+<div class="container">
+	<div class="card mt-5">
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-responsive">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Name</th>
+						<th>Description</th>
+						<th>SKU</th>
+						<th>CostPrice</th>
+						<th>SellPrice</th>
+						<th>Discount</th>
+						<th>Status</th>
+						<th>Colors</th>
+						<th>Sizes</th>
+						<th>Categories</th>
+						<th>Cover Image</th>
+						<th colspan="2">Operation</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var p in Model.Items)
+					{
+					<tr>
+						<td>@p.Id</td>
+						<td>@p.Name</td>
+						<td>@p.Description</td>
+						<td>@p.SKU</td>
+						<td>@p.CostPrice</td>
+						<td>@p.SellPrice</td>
+						<td>@p.Discount</td>
+						<td>@p.IsDeleted</td>
+						<td>
+							@foreach (var color in p?.ProductColors.Where(pc=>pc.ProductId == p.Id))
+							{
+								<span>@color.Color.Name</span>
+							}
+							</td>
+						<td>
+							@foreach (var size in p?.ProductSizes.Where(ps=>ps.ProductId == p.Id))
+							{
+								<span>@size.Size.Name</span>
+							}
+							</td>
+						<td>
+							@foreach (var category in p?.ProductCategories.Where(pc=>pc.ProductId == p.Id))
+							{
+								<span>@category.Category.Name</span>
+							}
+							</td>
+						<td><img width="40" src="~/assets/images/product/@p?.ProductImages?.FirstOrDefault(pi=>pi.IsCover == true).ImageUrl"> </td>
+						<td><a class="btn btn-danger" asp-area="Manage" asp-controller="Product" asp-action="Delete" asp-route-id="@p.Id">Delete</a></td>
+						<td><a class="btn btn-info" asp-area="Manage" asp-controller="Product" asp-action="Update" asp-route-id="@p.Id">Update</a></td>
+					</tr>
+					}
+				</tbody>
+			</table>
+					
+			<nav class="mt-5" aria-label="...">
+		  <ul class="pagination pagination-sm">
+			  @if (Model.CurrentPage >1)
+					{
+			<li class="page-item p-lg-1" aria-current="page">
+				<a asp-action="Index" asp-route-page="@Model.CurrentPage-1" class="page-link">Previous</a>
+			</li>
+					}
+			  @for (int i = 1; i <= Model.MaxPageCount; i++)
+					{
+			<li class="page-item p-lg-1 @(Model.CurrentPage == i ? "disabled" :"")" aria-current="page">
+				<a asp-action="Index" asp-route-page="@i" class="page-link">@i</a>
+			</li>
+					}
+			  @if (Model.CurrentPage <Model.MaxPageCount)
+					{
+			<li class="page-item p-lg-1" aria-current="page">
+				<a asp-action="Index" asp-route-page="@(Model.CurrentPage+1)" class="page-link">Next</a>
+			</li>
+					}
+		  </ul>
+		</nav>
+		</div>
+	</div>
+</div>

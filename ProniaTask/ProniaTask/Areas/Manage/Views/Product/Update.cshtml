@@ -1,0 +1,112 @@
+﻿@model UpdateProductVM
+            <div class="container">
+              <div class="card mt-5">
+                <div class="card-body">
+                  <h4 class="card-title">Update Product</h4>
+                  <form class="forms-sample" enctype="multipart/form-data" method="post">
+                    <div class="form-group">
+                      <label asp-for="Name">Name</label>
+                      <input asp-for="Name" class="form-control" placeholder="Name">
+                      <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>                    
+                    <div class="form-group">
+                      <label asp-for="CostPrice">CostPrice</label>
+                      <input asp-for="CostPrice" class="form-control" placeholder="CostPrice">
+                      <span asp-validation-for="CostPrice" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                      <label asp-for="SellPrice">SellPrice</label>
+                      <input asp-for="SellPrice" class="form-control" placeholder="SellPrice">
+                      <span asp-validation-for="SellPrice" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                      <label asp-for="Discount">Discount</label>
+                      <input asp-for="Discount" class="form-control" placeholder="Discount">
+                      <span asp-validation-for="Discount" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                      <label asp-for="Description">Description</label>
+                      <input asp-for="Description" class="form-control" placeholder="Description">
+                      <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                      <label asp-for="CoverImage"> New Cover Image</label>
+                      <input accept="image/*" asp-for="CoverImage" class="form-control" placeholder="CoverImage">
+                      <span asp-validation-for="CoverImage" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                      <label asp-for="HoverImage">New Hover Image</label>
+                      <input accept="image/*" asp-for="HoverImage" class="form-control" placeholder="HoverImage">
+                      <span asp-validation-for="HoverImage" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                      <label asp-for="OtherImages">New Other Images</label>
+                      <input accept="image/*" asp-for="OtherImages" class="form-control" placeholder="OtherImages">
+                      <span asp-validation-for="OtherImages" class="text-danger"></span>
+                    </div>
+                                        
+                    <div class="form-group">
+                        <h3>Cover Image</h3>
+                       <img width="150" height="200" src="~/assets/images/product/@Model.ProductImages.FirstOrDefault(pi=>pi.IsCover == true).ImageUrl" />
+                    </div>
+                    <div class=" form-group container">
+                        @if (Model.ProductImages.Count(pi=>pi.IsCover == false) == 1)
+                    {
+                        <h3>Choose pictures you want to delete</h3>
+                        <br />
+                        <div class="row mb-4">
+                         <h4>Hover Image</h4>
+                        <div class="col"> 
+                            <label for="prod(@Model.ProductImages.FirstOrDefault(pi=>pi.IsCover == false).Id)">
+                                <img width="150" height="200"  src="~/assets/images/product/@Model.ProductImages.FirstOrDefault(pi=>pi.IsCover == false).ImageUrl" /> 
+                                </label>
+                            <input type="checkbox" id="prod(@Model.ProductImages.FirstOrDefault(pi=>pi.IsCover == false).Id)"name="ImageIds" value="@Model.ProductImages.FirstOrDefault(pi=>pi.IsCover == false)?.Id">
+                        </div>
+                        </div>
+                    }
+                                            
+                    @if (Model.ProductImages.Count(pi=>pi.IsCover == null) > 0)
+                    {
+                         <h4>Other Images</h4>
+                        <div class="row">
+                    @foreach (var item in Model.ProductImages)
+                    {
+                        if (item.IsCover == null)
+                            {
+                        <div class="col-md-4"> 
+                            <label for="prod(@item.Id)"><img width="150" height="200" itemid="@item.Id" src="~/assets/images/product/@item.ImageUrl" /> </label>
+                            <input type="checkbox" id="prod(@item.Id)"name="ImageIds" value="@item.Id">
+                        </div>
+                            }
+                    }
+                        </div>
+                        
+                    }
+                </div>
+                    <div class="form-group">
+                      <label asp-for="CategoryIds"></label>
+                      <select class="form-control" asp-for="CategoryIds" asp-items="@ViewBag.Categories">
+                          <option disabled selected>Select a category</option>
+                      </select>
+                      <span asp-validation-for="CategoryIds" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                      <label asp-for="ColorIds"></label>
+                      <select class="form-control" asp-for="ColorIds" asp-items="@ViewBag.Colors">
+                          <option disabled selected>Select a color</option>
+                      </select>
+                      <span asp-validation-for="ColorIds" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                      <label asp-for="SizeIds"></label>
+                      <select class="form-control" asp-for="SizeIds" asp-items="@ViewBag.Sizes">
+                          <option disabled selected>Select a size</option>
+                      </select>
+                      <span asp-validation-for="SizeIds" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary me-2">Submit</button>
+                    <a asp-action="Index" class="btn btn-light">Cancel</a>
+                  </form>
+                </div>
+              </div>
+            </div>
